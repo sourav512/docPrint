@@ -5,7 +5,6 @@ class DocumentPrint {
         this.images = [null, null];
         this.imageSizes = [200, 200];
         this.documentId = '';
-        this.currentImageIndex = null;
         this.init();
     }
 
@@ -24,43 +23,13 @@ class DocumentPrint {
     }
 
     bindEvents() {
-        // Upload box click handlers
-        document.querySelectorAll('.upload-box').forEach((box, index) => {
-            box.addEventListener('click', () => {
-                this.currentImageIndex = index;
-                this.showImageSourceModal();
-            });
+        // Image upload handlers
+        document.getElementById('image1').addEventListener('change', (e) => {
+            this.handleImageUpload(e, 0);
         });
 
-        // Modal handlers
-        document.getElementById('closeModal').addEventListener('click', () => {
-            this.hideImageSourceModal();
-        });
-
-        document.getElementById('uploadBtn').addEventListener('click', () => {
-            this.selectFromGallery();
-        });
-
-        document.getElementById('cameraBtn').addEventListener('click', () => {
-            this.takePhoto();
-        });
-
-        // File input handlers
-        document.getElementById('fileUpload').addEventListener('change', (e) => {
-            this.handleImageUpload(e, this.currentImageIndex);
-            this.hideImageSourceModal();
-        });
-
-        document.getElementById('cameraCapture').addEventListener('change', (e) => {
-            this.handleImageUpload(e, this.currentImageIndex);
-            this.hideImageSourceModal();
-        });
-
-        // Close modal when clicking outside
-        document.getElementById('imageSourceModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('imageSourceModal')) {
-                this.hideImageSourceModal();
-            }
+        document.getElementById('image2').addEventListener('change', (e) => {
+            this.handleImageUpload(e, 1);
         });
 
         // Size control handlers
@@ -84,23 +53,6 @@ class DocumentPrint {
         document.getElementById('printBtn').addEventListener('click', () => {
             this.printCanvas();
         });
-    }
-
-    showImageSourceModal() {
-        document.getElementById('imageSourceModal').style.display = 'block';
-    }
-
-    hideImageSourceModal() {
-        document.getElementById('imageSourceModal').style.display = 'none';
-        this.currentImageIndex = null;
-    }
-
-    selectFromGallery() {
-        document.getElementById('fileUpload').click();
-    }
-
-    takePhoto() {
-        document.getElementById('cameraCapture').click();
     }
 
     handleImageUpload(event, index) {
@@ -133,7 +85,7 @@ class DocumentPrint {
     }
 
     updateUploadUI(index, filename) {
-        const uploadBox = document.querySelector(`[data-image-index="${index}"]`);
+        const uploadBox = document.querySelector(`#image${index + 1}`).parentElement.querySelector('.upload-box');
         const uploadText = uploadBox.querySelector('.upload-text');
         const sizeControls = document.getElementById(`sizeControls${index + 1}`);
         
@@ -370,8 +322,8 @@ class DocumentPrint {
         this.clearCanvas();
         
         // Reset file inputs
-        document.getElementById('fileUpload').value = '';
-        document.getElementById('cameraCapture').value = '';
+        document.getElementById('image1').value = '';
+        document.getElementById('image2').value = '';
         
         // Reset size controls
         document.getElementById('size1').value = 200;
@@ -621,7 +573,7 @@ class DocumentPrint {
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    window.documentPrintApp = new DocumentPrint();
+    new DocumentPrint();
 });
 
 // Add some utility functions for better user experience
@@ -639,6 +591,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const uploadBoxes = document.querySelectorAll('.upload-box');
     
     uploadBoxes.forEach((box, index) => {
+        const fileInput = document.getElementById(`image${index + 1}`);
+        
         // Drag and drop handlers
         box.addEventListener('dragover', (e) => {
             e.preventDefault();
@@ -661,16 +615,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (files.length > 0) {
                 const file = files[0];
                 if (file.type.startsWith('image/')) {
-                    // Create a mock event for the file upload
-                    const mockEvent = {
-                        target: {
-                            files: [file]
-                        }
-                    };
+                    // Create a new FileList-like object
+                    const dt = new DataTransfer();
+                    dt.items.add(file);
+                    fileInput.files = dt.files;
                     
-                    // Get the document print instance
-                    const app = window.documentPrintApp || new DocumentPrint();
-                    app.handleImageUpload(mockEvent, index);
+                    // Trigger change event
+                    fileInput.dispatchEvent(new Event('change'));
                 }
             }
         });
