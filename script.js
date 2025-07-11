@@ -371,43 +371,83 @@ class DocumentPrint {
             <html>
             <head>
                 <title>Print Document</title>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <style>
-                    body {
+                    * {
                         margin: 0;
                         padding: 0;
+                        box-sizing: border-box;
+                    }
+                    html, body {
+                        margin: 0;
+                        padding: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: white;
+                        overflow: hidden;
+                    }
+                    .print-container {
+                        width: 100%;
+                        height: 100vh;
                         display: flex;
                         justify-content: center;
-                        align-items: center;
-                        min-height: 100vh;
-                        background: white;
+                        align-items: flex-start;
+                        padding: 0;
                     }
                     img {
                         max-width: 100%;
                         max-height: 100vh;
                         object-fit: contain;
+                        display: block;
                     }
                     @media print {
-                        body {
-                            margin: 0;
-                            padding: 0;
+                        html, body {
+                            margin: 0 !important;
+                            padding: 0 !important;
+                            width: 100% !important;
+                            height: 100% !important;
+                            overflow: visible !important;
+                        }
+                        .print-container {
+                            width: 100% !important;
+                            height: 100% !important;
+                            display: block !important;
+                            padding: 0 !important;
+                            margin: 0 !important;
+                            page-break-inside: avoid !important;
                         }
                         img {
-                            width: 100%;
-                            height: auto;
-                            max-width: none;
-                            max-height: none;
+                            width: 100% !important;
+                            height: auto !important;
+                            max-width: none !important;
+                            max-height: none !important;
+                            object-fit: contain !important;
+                            display: block !important;
+                            margin: 0 !important;
+                            padding: 0 !important;
+                            page-break-inside: avoid !important;
+                        }
+                        @page {
+                            margin: 0 !important;
+                            padding: 0 !important;
+                            size: auto !important;
                         }
                     }
                 </style>
             </head>
             <body>
-                <img src="${canvasDataURL}" alt="Print Document">
+                <div class="print-container">
+                    <img src="${canvasDataURL}" alt="Print Document">
+                </div>
                 <script>
                     window.onload = function() {
-                        window.print();
-                        window.onafterprint = function() {
-                            window.close();
-                        };
+                        // Small delay to ensure image loads on mobile
+                        setTimeout(() => {
+                            window.print();
+                            window.onafterprint = function() {
+                                window.close();
+                            };
+                        }, 100);
                     };
                 </script>
             </body>
