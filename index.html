@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Print - Image Canvas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Document Print</h1>
+            <p>Upload up to 2 images and arrange them on an A4 canvas for 2.5" × 4" document printing</p>
+        </header>
+
+        <main>
+            <div class="upload-section">
+                
+                <div class="id-input-section">
+                    <label for="documentId" class="id-label">Document ID:</label>
+                    <input type="text" id="documentId" class="id-input" placeholder="Enter document ID..." maxlength="20">
+                </div>
+                
+                <div class="upload-controls">
+                    <div class="upload-group">
+                        <label for="image1" class="upload-label">
+                            <div class="upload-box">
+                                <span class="upload-text">Upload Image 1</span>
+                                <span class="upload-icon">📷</span>
+                            </div>
+                        </label>
+                        <input type="file" id="image1" accept="image/*" capture="camera" class="file-input">
+                        <div class="size-controls" id="sizeControls1" style="display: none;">
+                            <label>Size: <input type="range" id="size1" min="50" max="400" value="200" class="size-slider"></label>
+                            <span class="size-display" id="sizeDisplay1">200px</span>
+                        </div>
+                    </div>
+
+                    <div class="upload-group">
+                        <label for="image2" class="upload-label">
+                            <div class="upload-box">
+                                <span class="upload-text">Upload Image 2</span>
+                                <span class="upload-icon">📷</span>
+                            </div>
+                        </label>
+                        <input type="file" id="image2" accept="image/*" capture="camera" class="file-input">
+                        <div class="size-controls" id="sizeControls2" style="display: none;">
+                            <label>Size: <input type="range" id="size2" min="50" max="400" value="200" class="size-slider"></label>
+                            <span class="size-display" id="sizeDisplay2">200px</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="clearBtn" class="btn btn-secondary">Clear All</button>
+                    <button id="printBtn" class="btn btn-primary">Print Canvas</button>
+                </div>
+            </div>
+
+            <div class="canvas-section">
+                <div class="canvas-container">
+                    <canvas id="canvas" width="794" height="1123"></canvas>
+                </div>
+            </div>
+        </main>
+
+        <div class="info-panel">
+            <h3>Instructions:</h3>
+            <ul>
+                <li>Click on the upload boxes to select images</li>
+                <li>Use the single slider to adjust image size</li>
+                <li>Enter a document ID to print at the top corner</li>
+                <li>Images maintain their original aspect ratio</li>
+                <li>Two images will be arranged vertically on the canvas</li>
+                <li>Click "Print Canvas" to print as 2.5" × 4" document</li>
+                <li>Use "Clear All" to remove all images</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
