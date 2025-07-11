@@ -23,12 +23,38 @@ class DocumentPrint {
     }
 
     bindEvents() {
-        // Image upload handlers
-        document.getElementById('image1').addEventListener('change', (e) => {
+        // Checkbox handlers for upload type selection
+        document.getElementById('useCamera1').addEventListener('change', (e) => {
+            this.toggleUploadType(1, 'camera', e.target.checked);
+        });
+
+        document.getElementById('useUpload1').addEventListener('change', (e) => {
+            this.toggleUploadType(1, 'upload', e.target.checked);
+        });
+
+        document.getElementById('useCamera2').addEventListener('change', (e) => {
+            this.toggleUploadType(2, 'camera', e.target.checked);
+        });
+
+        document.getElementById('useUpload2').addEventListener('change', (e) => {
+            this.toggleUploadType(2, 'upload', e.target.checked);
+        });
+
+        // Camera input handlers
+        document.getElementById('camera1').addEventListener('change', (e) => {
             this.handleImageUpload(e, 0);
         });
 
-        document.getElementById('image2').addEventListener('change', (e) => {
+        document.getElementById('camera2').addEventListener('change', (e) => {
+            this.handleImageUpload(e, 1);
+        });
+
+        // Upload input handlers
+        document.getElementById('upload1').addEventListener('change', (e) => {
+            this.handleImageUpload(e, 0);
+        });
+
+        document.getElementById('upload2').addEventListener('change', (e) => {
             this.handleImageUpload(e, 1);
         });
 
@@ -53,6 +79,28 @@ class DocumentPrint {
         document.getElementById('printBtn').addEventListener('click', () => {
             this.printCanvas();
         });
+    }
+
+    toggleUploadType(imageNum, type, isChecked) {
+        const otherType = type === 'camera' ? 'upload' : 'camera';
+        const otherCheckbox = document.getElementById(`use${otherType.charAt(0).toUpperCase() + otherType.slice(1)}${imageNum}`);
+        
+        if (isChecked) {
+            // Uncheck the other option
+            otherCheckbox.checked = false;
+            
+            // Show the selected upload method
+            document.getElementById(`${type}Label${imageNum}`).style.display = 'block';
+            document.getElementById(`${otherType}Label${imageNum}`).style.display = 'none';
+        } else {
+            // If unchecking, ensure at least one option is selected
+            if (!otherCheckbox.checked) {
+                // Default to upload
+                document.getElementById(`useUpload${imageNum}`).checked = true;
+                document.getElementById(`uploadLabel${imageNum}`).style.display = 'block';
+                document.getElementById(`cameraLabel${imageNum}`).style.display = 'none';
+            }
+        }
     }
 
     handleImageUpload(event, index) {
@@ -85,12 +133,32 @@ class DocumentPrint {
     }
 
     updateUploadUI(index, filename) {
-        const uploadBox = document.querySelector(`#image${index + 1}`).parentElement.querySelector('.upload-box');
-        const uploadText = uploadBox.querySelector('.upload-text');
+        // Update the visible upload box for this image index
+        const cameraLabel = document.getElementById(`cameraLabel${index + 1}`);
+        const uploadLabel = document.getElementById(`uploadLabel${index + 1}`);
         const sizeControls = document.getElementById(`sizeControls${index + 1}`);
         
-        uploadBox.classList.add('has-image');
-        uploadText.textContent = `✓ ${filename}`;
+        // Update whichever upload box is currently visible
+        if (cameraLabel.style.display !== 'none') {
+            const cameraBox = cameraLabel.querySelector('.upload-box');
+            const uploadText = cameraBox.querySelector('.upload-text');
+            const uploadHint = cameraBox.querySelector('.upload-hint');
+            
+            cameraBox.classList.add('has-image');
+            uploadText.textContent = `✓ Photo Captured`;
+            uploadHint.textContent = filename.length > 20 ? filename.substring(0, 20) + '...' : filename;
+        }
+        
+        if (uploadLabel.style.display !== 'none') {
+            const uploadBox = uploadLabel.querySelector('.upload-box');
+            const uploadText = uploadBox.querySelector('.upload-text');
+            const uploadHint = uploadBox.querySelector('.upload-hint');
+            
+            uploadBox.classList.add('has-image');
+            uploadText.textContent = `✓ Image Selected`;
+            uploadHint.textContent = filename.length > 20 ? filename.substring(0, 20) + '...' : filename;
+        }
+        
         sizeControls.style.display = 'block';
     }
 
@@ -321,13 +389,17 @@ class DocumentPrint {
         this.documentId = '';
         this.clearCanvas();
         
-        // Reset file inputs
-        document.getElementById('image1').value = '';
-        document.getElementById('image2').value = '';
+        // Reset all file inputs
+        document.getElementById('camera1').value = '';
+        document.getElementById('camera2').value = '';
+        document.getElementById('upload1').value = '';
+        document.getElementById('upload2').value = '';
         
         // Reset size controls
         document.getElementById('size1').value = 200;
         document.getElementById('size2').value = 200;
+        document.getElementById('sizeDisplay1').textContent = '200px';
+        document.getElementById('sizeDisplay2').textContent = '200px';
         
         // Reset document ID input
         document.getElementById('documentId').value = '';
@@ -336,15 +408,23 @@ class DocumentPrint {
         document.getElementById('sizeControls1').style.display = 'none';
         document.getElementById('sizeControls2').style.display = 'none';
         
-        // Reset upload UI
-        document.querySelectorAll('.upload-box').forEach((box, index) => {
-            box.classList.remove('has-image');
-            box.querySelector('.upload-text').textContent = `Upload Image ${index + 1}`;
-        });
-        
-        // Reset size displays
-        document.getElementById('sizeDisplay1').textContent = '200px';
-        document.getElementById('sizeDisplay2').textContent = '200px';
+        // Reset upload boxes
+        for (let i = 1; i <= 2; i++) {
+            const cameraBox = document.querySelector(`#cameraLabel${i} .upload-box`);
+            const uploadBox = document.querySelector(`#uploadLabel${i} .upload-box`);
+            
+            if (cameraBox) {
+                cameraBox.classList.remove('has-image');
+                cameraBox.querySelector('.upload-text').textContent = 'Take Photo';
+                cameraBox.querySelector('.upload-hint').textContent = 'Tap to open camera';
+            }
+            
+            if (uploadBox) {
+                uploadBox.classList.remove('has-image');
+                uploadBox.querySelector('.upload-text').textContent = 'Choose Image';
+                uploadBox.querySelector('.upload-hint').textContent = 'Click or drag & drop';
+            }
+        }
     }
 
     printCanvas() {
@@ -573,7 +653,7 @@ class DocumentPrint {
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new DocumentPrint();
+    window.documentPrintApp = new DocumentPrint();
 });
 
 // Add some utility functions for better user experience
@@ -591,7 +671,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const uploadBoxes = document.querySelectorAll('.upload-box');
     
     uploadBoxes.forEach((box, index) => {
-        const fileInput = document.getElementById(`image${index + 1}`);
+        // Calculate which image index this box corresponds to
+        const imageIndex = Math.floor(index / 2);
         
         // Drag and drop handlers
         box.addEventListener('dragover', (e) => {
@@ -602,26 +683,41 @@ document.addEventListener('DOMContentLoaded', () => {
         
         box.addEventListener('dragleave', (e) => {
             e.preventDefault();
-            box.style.borderColor = '#e0e7ff';
-            box.style.backgroundColor = '#f8fafc';
+            // Reset to original colors based on box type
+            if (box.classList.contains('camera-box')) {
+                box.style.borderColor = '#10b981';
+                box.style.backgroundColor = '';
+            } else {
+                box.style.borderColor = '#3b82f6';
+                box.style.backgroundColor = '';
+            }
         });
         
         box.addEventListener('drop', (e) => {
             e.preventDefault();
-            box.style.borderColor = '#e0e7ff';
-            box.style.backgroundColor = '#f8fafc';
+            // Reset to original colors based on box type
+            if (box.classList.contains('camera-box')) {
+                box.style.borderColor = '#10b981';
+                box.style.backgroundColor = '';
+            } else {
+                box.style.borderColor = '#3b82f6';
+                box.style.backgroundColor = '';
+            }
             
             const files = e.dataTransfer.files;
             if (files.length > 0) {
                 const file = files[0];
                 if (file.type.startsWith('image/')) {
-                    // Create a new FileList-like object
-                    const dt = new DataTransfer();
-                    dt.items.add(file);
-                    fileInput.files = dt.files;
+                    // Create a mock event for the file upload
+                    const mockEvent = {
+                        target: {
+                            files: [file]
+                        }
+                    };
                     
-                    // Trigger change event
-                    fileInput.dispatchEvent(new Event('change'));
+                    // Get the document print instance and handle the upload
+                    const app = window.documentPrintApp || new DocumentPrint();
+                    app.handleImageUpload(mockEvent, imageIndex);
                 }
             }
         });

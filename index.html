@@ -9,55 +9,172 @@
 <body>
     <div class="container">
         <header>
-            <h1>Document Print</h1>
-            <p>Upload up to 2 images and arrange them on an A4 canvas for 2.5" × 4" document printing</p>
+            <div class="header-content">
+                <div class="header-icon">📄</div>
+                <div class="header-text">
+                    <h1>Document Print Studio</h1>
+                </div>
+            </div>
         </header>
 
         <main>
             <div class="upload-section">
+                <div class="section-header">
+                    <h2>📝 Document Setup</h2>
+                </div>
                 
                 <div class="id-input-section">
-                    <label for="documentId" class="id-label">Document ID:</label>
-                    <input type="text" id="documentId" class="id-input" placeholder="Enter document ID..." maxlength="20">
+                    <div class="input-group">
+                        <div class="input-icon">🏷️</div>
+                        <div class="input-content">
+                            <label for="documentId" class="id-label">Document ID</label>
+                            <input type="text" id="documentId" class="id-input" placeholder="Enter your document ID..." maxlength="20">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-header">
+                    <h2>📸 Image Upload</h2>
                 </div>
                 
                 <div class="upload-controls">
                     <div class="upload-group">
-                        <label for="image1" class="upload-label">
-                            <div class="upload-box">
-                                <span class="upload-text">Upload Image 1</span>
-                                <span class="upload-icon">📷</span>
+                        <div class="upload-card">
+                            <div class="card-header">
+                                <div class="card-icon">1️⃣</div>
+                                <h3>First Image</h3>
                             </div>
-                        </label>
-                        <input type="file" id="image1" accept="image/*" class="file-input">
-                        <div class="size-controls" id="sizeControls1" style="display: none;">
-                            <label>Size: <input type="range" id="size1" min="50" max="400" value="200" class="size-slider"></label>
-                            <span class="size-display" id="sizeDisplay1">200px</span>
+                            <div>
+                                <div class="toggle-group">
+                                    <label class="toggle-option">
+                                        <input type="checkbox" id="useCamera1" class="upload-checkbox">
+                                        <span class="toggle-button camera-toggle">
+                                            <span class="toggle-icon">📷</span>
+                                            <span class="toggle-text">Camera</span>
+                                        </span>
+                                    </label>
+                                    <label class="toggle-option">
+                                        <input type="checkbox" id="useUpload1" class="upload-checkbox" checked>
+                                        <span class="toggle-button gallery-toggle">
+                                            <span class="toggle-icon">📁</span>
+                                            <span class="toggle-text">Gallery</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="upload-area">
+                                <label for="camera1" class="upload-label" id="cameraLabel1" style="display: none;">
+                                    <div class="upload-box camera-box">
+                                        <div class="upload-content">
+                                            <span class="upload-icon">📷</span>
+                                            <span class="upload-text">Take Photo</span>
+                                            <span class="upload-hint">Tap to open camera</span>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label for="upload1" class="upload-label" id="uploadLabel1">
+                                    <div class="upload-box upload-box-gallery">
+                                        <div class="upload-content">
+                                            <span class="upload-icon">📁</span>
+                                            <span class="upload-text">Choose Image</span>
+                                            <span class="upload-hint">Click or drag & drop</span>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            <input type="file" id="camera1" accept="image/*" capture="camera" class="file-input">
+                            <input type="file" id="upload1" accept="image/*" class="file-input">
+                            <div class="size-controls" id="sizeControls1" style="display: none;">
+                                <div class="control-header">
+                                    <span class="control-icon">📏</span>
+                                    <span class="control-label">Image Size</span>
+                                </div>
+                                <div class="slider-container">
+                                    <input type="range" id="size1" min="50" max="400" value="200" class="size-slider">
+                                    <span class="size-display" id="sizeDisplay1">200px</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="upload-group">
-                        <label for="image2" class="upload-label">
-                            <div class="upload-box">
-                                <span class="upload-text">Upload Image 2</span>
-                                <span class="upload-icon">📷</span>
+                        <div class="upload-card">
+                            <div class="card-header">
+                                <div class="card-icon">2️⃣</div>
+                                <h3>Second Image</h3>
                             </div>
-                        </label>
-                        <input type="file" id="image2" accept="image/*" class="file-input">
-                        <div class="size-controls" id="sizeControls2" style="display: none;">
-                            <label>Size: <input type="range" id="size2" min="50" max="400" value="200" class="size-slider"></label>
-                            <span class="size-display" id="sizeDisplay2">200px</span>
+                            <div>
+                                <div class="toggle-group">
+                                    <label class="toggle-option">
+                                        <input type="checkbox" id="useCamera2" class="upload-checkbox">
+                                        <span class="toggle-button camera-toggle">
+                                            <span class="toggle-icon">📷</span>
+                                            <span class="toggle-text">Camera</span>
+                                        </span>
+                                    </label>
+                                    <label class="toggle-option">
+                                        <input type="checkbox" id="useUpload2" class="upload-checkbox" checked>
+                                        <span class="toggle-button gallery-toggle">
+                                            <span class="toggle-icon">📁</span>
+                                            <span class="toggle-text">Gallery</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="upload-area">
+                                <label for="camera2" class="upload-label" id="cameraLabel2" style="display: none;">
+                                    <div class="upload-box camera-box">
+                                        <div class="upload-content">
+                                            <span class="upload-icon">📷</span>
+                                            <span class="upload-text">Take Photo</span>
+                                            <span class="upload-hint">Tap to open camera</span>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label for="upload2" class="upload-label" id="uploadLabel2">
+                                    <div class="upload-box upload-box-gallery">
+                                        <div class="upload-content">
+                                            <span class="upload-icon">📁</span>
+                                            <span class="upload-text">Choose Image</span>
+                                            <span class="upload-hint">Click or drag & drop</span>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            <input type="file" id="camera2" accept="image/*" capture="camera" class="file-input">
+                            <input type="file" id="upload2" accept="image/*" class="file-input">
+                            <div class="size-controls" id="sizeControls2" style="display: none;">
+                                <div class="control-header">
+                                    <span class="control-icon">📏</span>
+                                    <span class="control-label">Image Size</span>
+                                </div>
+                                <div class="slider-container">
+                                    <input type="range" id="size2" min="50" max="400" value="200" class="size-slider">
+                                    <span class="size-display" id="sizeDisplay2">200px</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="action-buttons">
-                    <button id="clearBtn" class="btn btn-secondary">Clear All</button>
-                    <button id="printBtn" class="btn btn-primary">Print Canvas</button>
+                <div class="action-section">
+                    <div class="action-buttons">
+                        <button id="clearBtn" class="btn btn-secondary">
+                            <span class="btn-icon">🗑️</span>
+                            <span class="btn-text">Clear All</span>
+                        </button>
+                        <button id="printBtn" class="btn btn-primary">
+                            <span class="btn-icon">🖨️</span>
+                            <span class="btn-text">Print Canvas</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <div class="canvas-section">
+                <div class="section-header">
+                    <h2>🎨 Preview Canvas</h2>
+                </div>
                 <div class="canvas-container">
                     <canvas id="canvas" width="794" height="1123"></canvas>
                 </div>
@@ -65,16 +182,37 @@
         </main>
 
         <div class="info-panel">
-            <h3>Instructions:</h3>
-            <ul>
-                <li>Click on the upload boxes to select images</li>
-                <li>Use the single slider to adjust image size</li>
-                <li>Enter a document ID to print at the top corner</li>
-                <li>Images maintain their original aspect ratio</li>
-                <li>Two images will be arranged vertically on the canvas</li>
-                <li>Click "Print Canvas" to print as 2.5" × 4" document</li>
-                <li>Use "Clear All" to remove all images</li>
-            </ul>
+            <div class="info-header">
+                <h3>💡 Quick Guide</h3>
+            </div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-icon">✅</div>
+                        <div class="info-text">Select upload method using toggle buttons</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">📤</div>
+                        <div class="info-text">Upload images by clicking or dragging</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">🎚️</div>
+                        <div class="info-text">Adjust image size with sliders</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">🏷️</div>
+                        <div class="info-text">Enter document ID for printing</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">📄</div>
+                        <div class="info-text">Images arranged automatically on canvas</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">🖨️</div>
+                        <div class="info-text">Print optimized for 2.5" × 4" format</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
