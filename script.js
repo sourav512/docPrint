@@ -5,6 +5,7 @@ class DocumentPrint {
         this.images = [null, null];
         this.imageSizes = [200, 200];
         this.documentId = '';
+        this.currentImageIndex = null;
         this.init();
     }
 
@@ -23,13 +24,43 @@ class DocumentPrint {
     }
 
     bindEvents() {
-        // Image upload handlers
-        document.getElementById('image1').addEventListener('change', (e) => {
-            this.handleImageUpload(e, 0);
+        // Upload box click handlers
+        document.querySelectorAll('.upload-box').forEach((box, index) => {
+            box.addEventListener('click', () => {
+                this.currentImageIndex = index;
+                this.showImageSourceModal();
+            });
         });
 
-        document.getElementById('image2').addEventListener('change', (e) => {
-            this.handleImageUpload(e, 1);
+        // Modal handlers
+        document.getElementById('closeModal').addEventListener('click', () => {
+            this.hideImageSourceModal();
+        });
+
+        document.getElementById('uploadBtn').addEventListener('click', () => {
+            this.selectFromGallery();
+        });
+
+        document.getElementById('cameraBtn').addEventListener('click', () => {
+            this.takePhoto();
+        });
+
+        // File input handlers
+        document.getElementById('fileUpload').addEventListener('change', (e) => {
+            this.handleImageUpload(e, this.currentImageIndex);
+            this.hideImageSourceModal();
+        });
+
+        document.getElementById('cameraCapture').addEventListener('change', (e) => {
+            this.handleImageUpload(e, this.currentImageIndex);
+            this.hideImageSourceModal();
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('imageSourceModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('imageSourceModal')) {
+                this.hideImageSourceModal();
+            }
         });
 
         // Size control handlers
@@ -53,6 +84,23 @@ class DocumentPrint {
         document.getElementById('printBtn').addEventListener('click', () => {
             this.printCanvas();
         });
+    }
+
+    showImageSourceModal() {
+        document.getElementById('imageSourceModal').style.display = 'block';
+    }
+
+    hideImageSourceModal() {
+        document.getElementById('imageSourceModal').style.display = 'none';
+        this.currentImageIndex = null;
+    }
+
+    selectFromGallery() {
+        document.getElementById('fileUpload').click();
+    }
+
+    takePhoto() {
+        document.getElementById('cameraCapture').click();
     }
 
     handleImageUpload(event, index) {
@@ -85,7 +133,7 @@ class DocumentPrint {
     }
 
     updateUploadUI(index, filename) {
-        const uploadBox = document.querySelector(`#image${index + 1}`).parentElement.querySelector('.upload-box');
+        const uploadBox = document.querySelector(`[data-image-index="${index}"]`);
         const uploadText = uploadBox.querySelector('.upload-text');
         const sizeControls = document.getElementById(`sizeControls${index + 1}`);
         
@@ -322,8 +370,8 @@ class DocumentPrint {
         this.clearCanvas();
         
         // Reset file inputs
-        document.getElementById('image1').value = '';
-        document.getElementById('image2').value = '';
+        document.getElementById('fileUpload').value = '';
+        document.getElementById('cameraCapture').value = '';
         
         // Reset size controls
         document.getElementById('size1').value = 200;
@@ -359,6 +407,112 @@ class DocumentPrint {
             return;
         }
 
+        // For Safari, use a different approach
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        
+        if (isSafari) {
+            // Safari-specific printing method
+            this.printCanvasSafari();
+        } else {
+            // Standard printing method for other browsers
+            this.printCanvasStandard();
+        }
+    }
+
+    printCanvasSafari() {
+        // Convert canvas to data URL
+        const canvasDataURL = this.canvas.toDataURL('image/png', 1.0);
+        
+        // Create a temporary div to hold the image
+        const printDiv = document.createElement('div');
+        printDiv.style.cssText = `
+            position: fixed;
+            top: -9999px;
+            left: -9999px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: white;
+        `;
+        
+        const img = document.createElement('img');
+        img.src = canvasDataURL;
+        img.style.cssText = `
+            width: 100%;
+            height: auto;
+            max-width: none;
+            display: block;
+            margin: 0;
+            padding: 0;
+        `;
+        
+        printDiv.appendChild(img);
+        document.body.appendChild(printDiv);
+        
+        // Wait for image to load
+        img.onload = () => {
+            // Show the print div
+            printDiv.style.top = '0';
+            printDiv.style.left = '0';
+            
+            // Hide the main content
+            const mainContent = document.querySelector('.container');
+            const originalDisplay = mainContent.style.display;
+            mainContent.style.display = 'none';
+            
+            // Add print styles
+            const printStyles = document.createElement('style');
+            printStyles.textContent = `
+                @media print {
+                    body * {
+                        visibility: hidden;
+                    }
+                    #printDiv, #printDiv * {
+                        visibility: visible;
+                    }
+                    #printDiv {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 100% !important;
+                        height: 100% !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                    }
+                    #printDiv img {
+                        width: 100% !important;
+                        height: auto !important;
+                        max-width: none !important;
+                        max-height: none !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                    }
+                    @page {
+                        margin: 0 !important;
+                        size: auto !important;
+                    }
+                }
+            `;
+            printStyles.id = 'printStyles';
+            document.head.appendChild(printStyles);
+            
+            printDiv.id = 'printDiv';
+            
+            // Trigger print
+            setTimeout(() => {
+                window.print();
+                
+                // Clean up after printing
+                setTimeout(() => {
+                    document.body.removeChild(printDiv);
+                    document.head.removeChild(printStyles);
+                    mainContent.style.display = originalDisplay;
+                }, 1000);
+            }, 500);
+        };
+    }
+
+    printCanvasStandard() {
         // Create a new window for printing
         const printWindow = window.open('', '_blank');
         
@@ -384,64 +538,36 @@ class DocumentPrint {
                         width: 100%;
                         height: 100%;
                         background: white;
-                        overflow: hidden;
-                    }
-                    .print-container {
-                        width: 100%;
-                        height: 100vh;
-                        display: flex;
-                        justify-content: center;
-                        align-items: flex-start;
-                        padding: 0;
                     }
                     img {
-                        max-width: 100%;
-                        max-height: 100vh;
-                        object-fit: contain;
+                        width: 100%;
+                        height: auto;
                         display: block;
+                        margin: 0;
+                        padding: 0;
                     }
                     @media print {
+                        @page {
+                            margin: 0;
+                            size: auto;
+                        }
                         html, body {
                             margin: 0 !important;
                             padding: 0 !important;
-                            width: 100% !important;
-                            height: 100% !important;
-                            overflow: visible !important;
-                        }
-                        .print-container {
-                            width: 100% !important;
-                            height: 100% !important;
-                            display: block !important;
-                            padding: 0 !important;
-                            margin: 0 !important;
-                            page-break-inside: avoid !important;
                         }
                         img {
                             width: 100% !important;
                             height: auto !important;
                             max-width: none !important;
                             max-height: none !important;
-                            object-fit: contain !important;
-                            display: block !important;
-                            margin: 0 !important;
-                            padding: 0 !important;
-                            page-break-inside: avoid !important;
-                        }
-                        @page {
-                            margin: 0 !important;
-                            padding: 0 !important;
-                            size: auto !important;
                         }
                     }
                 </style>
             </head>
             <body>
-                <div class="print-container">
-                    <img src="${canvasDataURL}" alt="Print Document">
-                </div>
+                <img src="${canvasDataURL}" alt="Print Document">
                 <script>
                     window.onload = function() {
-                        // Small delay to ensure image loads on mobile
                         setTimeout(() => {
                             window.print();
                             window.onafterprint = function() {
@@ -495,7 +621,7 @@ class DocumentPrint {
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new DocumentPrint();
+    window.documentPrintApp = new DocumentPrint();
 });
 
 // Add some utility functions for better user experience
@@ -513,8 +639,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const uploadBoxes = document.querySelectorAll('.upload-box');
     
     uploadBoxes.forEach((box, index) => {
-        const fileInput = document.getElementById(`image${index + 1}`);
-        
         // Drag and drop handlers
         box.addEventListener('dragover', (e) => {
             e.preventDefault();
@@ -537,13 +661,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (files.length > 0) {
                 const file = files[0];
                 if (file.type.startsWith('image/')) {
-                    // Create a new FileList-like object
-                    const dt = new DataTransfer();
-                    dt.items.add(file);
-                    fileInput.files = dt.files;
+                    // Create a mock event for the file upload
+                    const mockEvent = {
+                        target: {
+                            files: [file]
+                        }
+                    };
                     
-                    // Trigger change event
-                    fileInput.dispatchEvent(new Event('change'));
+                    // Get the document print instance
+                    const app = window.documentPrintApp || new DocumentPrint();
+                    app.handleImageUpload(mockEvent, index);
                 }
             }
         });

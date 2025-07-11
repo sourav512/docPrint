@@ -23,13 +23,10 @@
                 
                 <div class="upload-controls">
                     <div class="upload-group">
-                        <label for="image1" class="upload-label">
-                            <div class="upload-box">
-                                <span class="upload-text">Upload Image 1</span>
-                                <span class="upload-icon">📷</span>
-                            </div>
-                        </label>
-                        <input type="file" id="image1" accept="image/*" capture="camera" class="file-input">
+                        <div class="upload-box" data-image-index="0">
+                            <span class="upload-text">Upload Image 1</span>
+                            <span class="upload-icon">📷</span>
+                        </div>
                         <div class="size-controls" id="sizeControls1" style="display: none;">
                             <label>Size: <input type="range" id="size1" min="50" max="400" value="200" class="size-slider"></label>
                             <span class="size-display" id="sizeDisplay1">200px</span>
@@ -37,13 +34,10 @@
                     </div>
 
                     <div class="upload-group">
-                        <label for="image2" class="upload-label">
-                            <div class="upload-box">
-                                <span class="upload-text">Upload Image 2</span>
-                                <span class="upload-icon">📷</span>
-                            </div>
-                        </label>
-                        <input type="file" id="image2" accept="image/*" capture="camera" class="file-input">
+                        <div class="upload-box" data-image-index="1">
+                            <span class="upload-text">Upload Image 2</span>
+                            <span class="upload-icon">📷</span>
+                        </div>
                         <div class="size-controls" id="sizeControls2" style="display: none;">
                             <label>Size: <input type="range" id="size2" min="50" max="400" value="200" class="size-slider"></label>
                             <span class="size-display" id="sizeDisplay2">200px</span>
@@ -77,6 +71,33 @@
             </ul>
         </div>
     </div>
+
+    <!-- Image Source Selection Modal -->
+    <div id="imageSourceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Choose Image Source</h3>
+                <span class="close" id="closeModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>How would you like to add your image?</p>
+                <div class="modal-options">
+                    <button class="option-btn" id="uploadBtn">
+                        <span class="option-icon">📁</span>
+                        <span class="option-text">Upload from Gallery</span>
+                    </button>
+                    <button class="option-btn" id="cameraBtn">
+                        <span class="option-icon">📷</span>
+                        <span class="option-text">Take Photo</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden file inputs for different capture modes -->
+    <input type="file" id="fileUpload" accept="image/*" style="display: none;">
+    <input type="file" id="cameraCapture" accept="image/*" capture="camera" style="display: none;">
 
     <script src="script.js"></script>
 </body>
