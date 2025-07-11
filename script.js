@@ -11,7 +11,7 @@ class DocumentPrint {
     init() {
         // Set canvas size to A4 dimensions (72 DPI) for editing
         // A4 = 210mm x 297mm = 794px x 1123px at 72 DPI
-        // Final print output will be scaled to 2.5" × 4" document
+        // Final print output will be scaled to A4 format
         this.canvas.width = 794;
         this.canvas.height = 1123;
         
@@ -465,17 +465,23 @@ class DocumentPrint {
             height: 100%;
             z-index: 9999;
             background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         `;
         
         const img = document.createElement('img');
         img.src = canvasDataURL;
         img.style.cssText = `
-            width: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
             height: auto;
-            max-width: none;
             display: block;
             margin: 0;
             padding: 0;
+            object-fit: contain;
         `;
         
         printDiv.appendChild(img);
@@ -496,6 +502,10 @@ class DocumentPrint {
             const printStyles = document.createElement('style');
             printStyles.textContent = `
                 @media print {
+                    @page {
+                        size: A4;
+                        margin: 0.5in;
+                    }
                     body * {
                         visibility: hidden;
                     }
@@ -503,25 +513,23 @@ class DocumentPrint {
                         visibility: visible;
                     }
                     #printDiv {
-                        position: absolute;
-                        left: 0;
-                        top: 0;
+                        position: absolute !important;
+                        left: 0 !important;
+                        top: 0 !important;
                         width: 100% !important;
                         height: 100% !important;
                         margin: 0 !important;
                         padding: 0 !important;
+                        display: block !important;
                     }
                     #printDiv img {
                         width: 100% !important;
-                        height: auto !important;
+                        height: 100% !important;
                         max-width: none !important;
                         max-height: none !important;
                         margin: 0 !important;
                         padding: 0 !important;
-                    }
-                    @page {
-                        margin: 0 !important;
-                        size: auto !important;
+                        object-fit: contain !important;
                     }
                 }
             `;
@@ -556,7 +564,7 @@ class DocumentPrint {
             <!DOCTYPE html>
             <html>
             <head>
-                <title>Print Document</title>
+                <title>Print Document - A4 Size</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <style>
                     * {
@@ -571,33 +579,53 @@ class DocumentPrint {
                         height: 100%;
                         background: white;
                     }
-                    img {
+                    .print-container {
                         width: 100%;
+                        height: 100vh;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        padding: 20px;
+                    }
+                    img {
+                        max-width: 100%;
+                        max-height: 100%;
+                        width: auto;
                         height: auto;
                         display: block;
-                        margin: 0;
-                        padding: 0;
+                        object-fit: contain;
                     }
                     @media print {
                         @page {
-                            margin: 0;
-                            size: auto;
+                            size: A4;
+                            margin: 0.5in;
                         }
                         html, body {
                             margin: 0 !important;
                             padding: 0 !important;
+                            width: 100% !important;
+                            height: 100% !important;
+                        }
+                        .print-container {
+                            width: 100% !important;
+                            height: 100% !important;
+                            padding: 0 !important;
+                            display: block !important;
                         }
                         img {
                             width: 100% !important;
-                            height: auto !important;
+                            height: 100% !important;
                             max-width: none !important;
                             max-height: none !important;
+                            object-fit: contain !important;
                         }
                     }
                 </style>
             </head>
             <body>
-                <img src="${canvasDataURL}" alt="Print Document">
+                <div class="print-container">
+                    <img src="${canvasDataURL}" alt="Print Document">
+                </div>
                 <script>
                     window.onload = function() {
                         setTimeout(() => {
