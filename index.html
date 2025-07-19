@@ -23,7 +23,6 @@
                 <div class="section-header">
                     <h2>📝 Document Setup</h2>
                 </div>
-                
                 <div class="id-input-section">
                     <div class="input-group">
                         <div class="input-icon">🏷️</div>
@@ -33,131 +32,20 @@
                         </div>
                     </div>
                 </div>
-                
+                <div class="layout-section">
+                    <label for="layoutSelect" class="id-label">Print Layout</label>
+                    <select id="layoutSelect" class="id-input">
+                        <option value="A4" selected>A4 (210mm × 297mm)</option>
+                        <option value="A5">A5 (148mm × 210mm)</option>
+                    </select>
+                </div>
                 <div class="section-header">
-                    <h2>📸 Image Upload</h2>
+                    <h2>📸 Images</h2>
                 </div>
-                
-                <div class="upload-controls">
-                    <div class="upload-group">
-                        <div class="upload-card">
-                            <div class="card-header">
-                                <div class="card-icon">1️⃣</div>
-                                <h3>First Image</h3>
-                            </div>
-                            <div>
-                                <div class="toggle-group">
-                                    <label class="toggle-option">
-                                        <input type="checkbox" id="useCamera1" class="upload-checkbox">
-                                        <span class="toggle-button camera-toggle">
-                                            <span class="toggle-icon">📷</span>
-                                            <span class="toggle-text">Camera</span>
-                                        </span>
-                                    </label>
-                                    <label class="toggle-option">
-                                        <input type="checkbox" id="useUpload1" class="upload-checkbox" checked>
-                                        <span class="toggle-button gallery-toggle">
-                                            <span class="toggle-icon">📁</span>
-                                            <span class="toggle-text">Gallery</span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="upload-area">
-                                <label for="camera1" class="upload-label" id="cameraLabel1" style="display: none;">
-                                    <div class="upload-box camera-box">
-                                        <div class="upload-content">
-                                            <span class="upload-icon">📷</span>
-                                            <span class="upload-text">Take Photo</span>
-                                            <span class="upload-hint">Tap to open camera</span>
-                                        </div>
-                                    </div>
-                                </label>
-                                <label for="upload1" class="upload-label" id="uploadLabel1">
-                                    <div class="upload-box upload-box-gallery">
-                                        <div class="upload-content">
-                                            <span class="upload-icon">📁</span>
-                                            <span class="upload-text">Choose Image</span>
-                                            <span class="upload-hint">Click or drag & drop</span>
-                                        </div>
-                                    </div>
-                                </label>
-                            </div>
-                            <input type="file" id="camera1" accept="image/*" capture="camera" class="file-input">
-                            <input type="file" id="upload1" accept="image/*" class="file-input">
-                            <div class="size-controls" id="sizeControls1" style="display: none;">
-                                <div class="control-header">
-                                    <span class="control-icon">📏</span>
-                                    <span class="control-label">Image Size</span>
-                                </div>
-                                <div class="slider-container">
-                                    <input type="range" id="size1" min="50" max="400" value="200" class="size-slider">
-                                    <span class="size-display" id="sizeDisplay1">200px</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="upload-group">
-                        <div class="upload-card">
-                            <div class="card-header">
-                                <div class="card-icon">2️⃣</div>
-                                <h3>Second Image</h3>
-                            </div>
-                            <div>
-                                <div class="toggle-group">
-                                    <label class="toggle-option">
-                                        <input type="checkbox" id="useCamera2" class="upload-checkbox">
-                                        <span class="toggle-button camera-toggle">
-                                            <span class="toggle-icon">📷</span>
-                                            <span class="toggle-text">Camera</span>
-                                        </span>
-                                    </label>
-                                    <label class="toggle-option">
-                                        <input type="checkbox" id="useUpload2" class="upload-checkbox" checked>
-                                        <span class="toggle-button gallery-toggle">
-                                            <span class="toggle-icon">📁</span>
-                                            <span class="toggle-text">Gallery</span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="upload-area">
-                                <label for="camera2" class="upload-label" id="cameraLabel2" style="display: none;">
-                                    <div class="upload-box camera-box">
-                                        <div class="upload-content">
-                                            <span class="upload-icon">📷</span>
-                                            <span class="upload-text">Take Photo</span>
-                                            <span class="upload-hint">Tap to open camera</span>
-                                        </div>
-                                    </div>
-                                </label>
-                                <label for="upload2" class="upload-label" id="uploadLabel2">
-                                    <div class="upload-box upload-box-gallery">
-                                        <div class="upload-content">
-                                            <span class="upload-icon">📁</span>
-                                            <span class="upload-text">Choose Image</span>
-                                            <span class="upload-hint">Click or drag & drop</span>
-                                        </div>
-                                    </div>
-                                </label>
-                            </div>
-                            <input type="file" id="camera2" accept="image/*" capture="camera" class="file-input">
-                            <input type="file" id="upload2" accept="image/*" class="file-input">
-                            <div class="size-controls" id="sizeControls2" style="display: none;">
-                                <div class="control-header">
-                                    <span class="control-icon">📏</span>
-                                    <span class="control-label">Image Size</span>
-                                </div>
-                                <div class="slider-container">
-                                    <input type="range" id="size2" min="50" max="400" value="200" class="size-slider">
-                                    <span class="size-display" id="sizeDisplay2">200px</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div id="dynamic-upload-controls"></div>
+                <div style="margin-top:16px; text-align:center;">
+                    <button id="addImageBtn" class="btn btn-primary" type="button"><span class="btn-icon">➕</span> <span class="btn-text">Add Image</span></button>
                 </div>
-
                 <div class="action-section">
                     <div class="action-buttons">
                         <button id="clearBtn" class="btn btn-secondary">
@@ -171,7 +59,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="canvas-section">
                 <div class="section-header">
                     <h2>🎨 Preview Canvas</h2>
