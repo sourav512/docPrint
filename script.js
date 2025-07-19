@@ -45,6 +45,50 @@ class DocumentPrint {
         document.getElementById('printBtn').addEventListener('click', () => {
             this.printCanvas();
         });
+        const shareBtn = document.getElementById('shareBtn');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', () => {
+                this.shareCanvasImage();
+            });
+        }
+    }
+    async shareCanvasImage() {
+        if (this.images.length === 0 || this.images.every(img => img === null)) {
+            alert('Please upload at least one image before sharing.');
+            return;
+        }
+        // Convert canvas to blob
+        this.canvas.toBlob(async (blob) => {
+            if (!blob) {
+                alert('Failed to generate image.');
+                return;
+            }
+            const file = new File([blob], 'document-print.png', { type: 'image/png' });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Document Print',
+                        text: 'Here is the document image.'
+                    });
+                } catch (err) {
+                    // User cancelled or error
+                }
+            } else {
+                // Fallback: download the image
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'document-print.png';
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 100);
+                alert('Sharing is not supported on this device. The image has been downloaded instead.');
+            }
+        }, 'image/png');
     }
 
     renderDynamicUploaders() {
