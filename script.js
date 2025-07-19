@@ -17,12 +17,13 @@ class DocumentPrint {
     }
 
     setCanvasSize(layout) {
+        const dpi = 150; // Assuming 150 DPI for standard display
         if (layout === 'A5') {
-            this.canvas.width = 559; // 148mm at 96dpi
-            this.canvas.height = 794; // 210mm at 96dpi
+            this.canvas.width = (148 / 25.4) * dpi; // 148mm at 150dpi
+            this.canvas.height = (210 / 25.4) * dpi; // 210mm at 150dpi
         } else {
-            this.canvas.width = 794; // 210mm at 96dpi
-            this.canvas.height = 1123; // 297mm at 96dpi
+            this.canvas.width = (210 / 25.4) * dpi; // 210mm at 150dpi
+            this.canvas.height = (297 / 25.4) * dpi; // 297mm at 150dpi
         }
     }
 
@@ -57,7 +58,8 @@ class DocumentPrint {
             alert('Please upload at least one image before sharing.');
             return;
         }
-        // Convert canvas to blob
+        // Detect Safari (desktop and iOS)
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
         this.canvas.toBlob(async (blob) => {
             if (!blob) {
                 alert('Failed to generate image.');
@@ -86,7 +88,10 @@ class DocumentPrint {
                     document.body.removeChild(a);
                     URL.revokeObjectURL(url);
                 }, 100);
-                alert('Sharing is not supported on this device. The image has been downloaded instead.');
+                if (!isSafari) {
+                    alert('Sharing is not supported on this device. The image has been downloaded instead.');
+                }
+                // For Safari, do not show alert (just download)
             }
         }, 'image/png');
     }
@@ -122,7 +127,7 @@ class DocumentPrint {
                             <span class="control-label">Image Size</span>
                         </div>
                         <div class="slider-container">
-                            <input type="range" min="50" max="${this.layout === 'A4' ? 400 : 300}" value="${this.imageSizes[idx] || 300}" class="size-slider image-size-slider" data-idx="${idx}">
+                            <input type="range" min="50" max="${this.layout === 'A4' ? 400 : 300}" value="${this.imageSizes[idx] || 200}" class="size-slider image-size-slider" data-idx="${idx}">
                             <span class="size-display" id="sizeDisplay${idx}">${this.imageSizes[idx] || 200}px</span>
                         </div>
                     </div>
@@ -154,7 +159,7 @@ class DocumentPrint {
 
     addImageUploader() {
         this.images.push(null);
-        this.imageSizes.push(200);
+        this.imageSizes.push(300);
         this.renderDynamicUploaders();
     }
 
