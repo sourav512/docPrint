@@ -127,7 +127,7 @@ class DocumentPrint {
                             <span class="control-label">Image Size</span>
                         </div>
                         <div class="slider-container">
-                            <input type="range" min="50" max="${this.layout === 'A4' ? 400 : 300}" value="${this.imageSizes[idx] || 200}" class="size-slider image-size-slider" data-idx="${idx}">
+                            <input type="range" min="50" max="${this.layout === 'A4' ? 500 : 300}" value="${this.imageSizes[idx] || 200}" class="size-slider image-size-slider" data-idx="${idx}">
                             <span class="size-display" id="sizeDisplay${idx}">${this.imageSizes[idx] || 200}px</span>
                         </div>
                     </div>
@@ -159,7 +159,7 @@ class DocumentPrint {
 
     addImageUploader() {
         this.images.push(null);
-        this.imageSizes.push(300);
+        this.imageSizes.push(400);
         this.renderDynamicUploaders();
     }
 
@@ -220,8 +220,8 @@ class DocumentPrint {
         // Arrange images in a grid (auto-fit)
         const cols = this.layout === 'A4' ? 2 : 1;
         const rows = Math.ceil(validImages.length / cols);
-        const gap = 20;
-        const margin = 40;
+        const gap = 10;
+        const margin = 20;
         const cellW = (this.canvas.width - gap * (cols - 1) - margin * 2) / cols;
         const cellH = (this.canvas.height - gap * (rows - 1) - margin * 2) / rows;
         validImages.forEach((item, idx) => {
