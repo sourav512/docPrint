@@ -329,7 +329,6 @@ class DocumentPrint {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
         `;
         
         const img = document.createElement('img');
