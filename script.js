@@ -69,8 +69,7 @@ class DocumentPrint {
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
                     await navigator.share({
-                        files: [file],
-                        title: 'Document Print'
+                        files: [file]
                     });
                 } catch (err) {
                     // User cancelled or error
