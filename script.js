@@ -70,8 +70,7 @@ class DocumentPrint {
                 try {
                     await navigator.share({
                         files: [file],
-                        title: 'Document Print',
-                        text: 'Here is the document image.'
+                        title: 'Document Print'
                     });
                 } catch (err) {
                     // User cancelled or error
