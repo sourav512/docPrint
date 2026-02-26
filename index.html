@@ -61,6 +61,12 @@
                             <span class="btn-text">Print Canvas</span>
                         </button>
                     </div>
+                    <div class="action-buttons" style="margin-top: 16px;">
+                        <button id="hotelBillBtn" class="btn btn-primary" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                            <span class="btn-icon">🏨</span>
+                            <span class="btn-text">Hotel Kailash Inn Bill</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="canvas-section">
@@ -72,6 +78,299 @@
                 </div>
             </div>
         </main>
+
+        <!-- Bill Generator Modal -->
+        <div id="billModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>🧾 Bill Generator (A5)</h2>
+                    <button id="closeBillModal" class="modal-close">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div class="bill-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="billTemplate">Bill Template Image</label>
+                                <input type="file" id="billTemplate" accept="image/*" class="form-input">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="guestName">Guest Name</label>
+                                <input type="text" id="guestName" class="form-input" placeholder="Enter guest name">
+                            </div>
+                            <div class="form-group">
+                                <label for="roomNumber">Room Number</label>
+                                <input type="text" id="roomNumber" class="form-input" placeholder="e.g., 101">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="checkInDate">Check-in Date</label>
+                                <input type="date" id="checkInDate" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="checkOutDate">Check-out Date</label>
+                                <input type="date" id="checkOutDate" class="form-input">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="roomRate">Room Rate (per night)</label>
+                                <input type="number" id="roomRate" class="form-input" placeholder="e.g., 1500">
+                            </div>
+                            <div class="form-group">
+                                <label for="totalAmount">Total Amount</label>
+                                <input type="number" id="totalAmount" class="form-input" placeholder="Auto-calculated" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="additionalCharges">Additional Charges</label>
+                                <input type="number" id="additionalCharges" class="form-input" placeholder="e.g., 500" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="paymentMethod">Payment Method</label>
+                                <select id="paymentMethod" class="form-input">
+                                    <option value="Cash">Cash</option>
+                                    <option value="Card">Card</option>
+                                    <option value="UPI">UPI</option>
+                                    <option value="Bank Transfer">Bank Transfer</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="remarks">Remarks / Notes</label>
+                                <textarea id="remarks" class="form-input" rows="2" placeholder="Any additional notes..."></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <h4 style="width:100%; margin-bottom:10px;">📍 Text Positioning (X, Y coordinates on template)</h4>
+                        </div>
+                        <div class="form-row position-row">
+                            <div class="form-group small">
+                                <label>Name X</label>
+                                <input type="number" id="posNameX" class="form-input" value="150">
+                            </div>
+                            <div class="form-group small">
+                                <label>Name Y</label>
+                                <input type="number" id="posNameY" class="form-input" value="180">
+                            </div>
+                            <div class="form-group small">
+                                <label>Room X</label>
+                                <input type="number" id="posRoomX" class="form-input" value="150">
+                            </div>
+                            <div class="form-group small">
+                                <label>Room Y</label>
+                                <input type="number" id="posRoomY" class="form-input" value="210">
+                            </div>
+                        </div>
+                        <div class="form-row position-row">
+                            <div class="form-group small">
+                                <label>Check-in X</label>
+                                <input type="number" id="posCheckInX" class="form-input" value="150">
+                            </div>
+                            <div class="form-group small">
+                                <label>Check-in Y</label>
+                                <input type="number" id="posCheckInY" class="form-input" value="240">
+                            </div>
+                            <div class="form-group small">
+                                <label>Check-out X</label>
+                                <input type="number" id="posCheckOutX" class="form-input" value="150">
+                            </div>
+                            <div class="form-group small">
+                                <label>Check-out Y</label>
+                                <input type="number" id="posCheckOutY" class="form-input" value="270">
+                            </div>
+                        </div>
+                        <div class="form-row position-row">
+                            <div class="form-group small">
+                                <label>Total X</label>
+                                <input type="number" id="posTotalX" class="form-input" value="150">
+                            </div>
+                            <div class="form-group small">
+                                <label>Total Y</label>
+                                <input type="number" id="posTotalY" class="form-input" value="320">
+                            </div>
+                            <div class="form-group small">
+                                <label>Font Size</label>
+                                <input type="number" id="billFontSize" class="form-input" value="14">
+                            </div>
+                            <div class="form-group small">
+                                <label>Font Color</label>
+                                <input type="color" id="billFontColor" class="form-input" value="#000000">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="previewBillBtn" class="btn btn-secondary">
+                        <span class="btn-icon">👁️</span>
+                        <span class="btn-text">Preview Bill</span>
+                    </button>
+                    <button id="printBillBtn" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                        <span class="btn-icon">🖨️</span>
+                        <span class="btn-text">Print Bill</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hotel Kailash Inn Bill Modal -->
+        <div id="hotelBillModal" class="modal" style="display: none;">
+            <div class="modal-content hotel-bill-modal">
+                <div class="modal-header" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                    <h2>🏨 Hotel Kailash Inn - Bill</h2>
+                    <button id="closeHotelBillModal" class="modal-close">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div class="bill-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="hGuestName">Guest Name *</label>
+                                <input type="text" id="hGuestName" class="form-input" placeholder="Enter guest name">
+                            </div>
+                            <div class="form-group">
+                                <label for="hGuestPhone">Phone Number</label>
+                                <input type="tel" id="hGuestPhone" class="form-input" placeholder="e.g., 9876543210">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="hGuestAddress">Address</label>
+                                <input type="text" id="hGuestAddress" class="form-input" placeholder="Guest address">
+                            </div>
+                        </div>
+                        
+                        <!-- Rooms Section -->
+                        <div class="form-row" style="margin-top: 10px;">
+                            <h4 style="width:100%; margin-bottom:5px; display: flex; align-items: center; justify-content: space-between;">
+                                <span>🛏️ Room Details</span>
+                                <button type="button" id="addRoomBtn" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.85rem;">➕ Add Room</button>
+                            </h4>
+                        </div>
+                        <div id="roomsContainer">
+                            <!-- Room entries will be added here dynamically -->
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="hCheckInDate">Check-in Date *</label>
+                                <input type="date" id="hCheckInDate" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="hCheckInTime">Check-in Time</label>
+                                <input type="time" id="hCheckInTime" class="form-input" value="12:00">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="hCheckOutDate">Check-out Date *</label>
+                                <input type="date" id="hCheckOutDate" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="hCheckOutTime">Check-out Time</label>
+                                <input type="time" id="hCheckOutTime" class="form-input" value="11:00">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="hNumGuests">Number of Guests</label>
+                                <input type="number" id="hNumGuests" class="form-input" placeholder="e.g., 2" value="1" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="hNights">Total Nights</label>
+                                <input type="number" id="hNights" class="form-input" readonly placeholder="Auto-calculated">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="hTotalRoomCharges">Total Room Charges (₹)</label>
+                                <input type="number" id="hTotalRoomCharges" class="form-input" readonly placeholder="Auto-calculated">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="hFoodCharges">Food & Beverages (₹)</label>
+                                <input type="number" id="hFoodCharges" class="form-input" placeholder="e.g., 500" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="hServiceCharges">Service Charges (₹)</label>
+                                <input type="number" id="hServiceCharges" class="form-input" placeholder="e.g., 200" value="0">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="hOtherCharges">Other Charges (₹)</label>
+                                <input type="number" id="hOtherCharges" class="form-input" placeholder="e.g., 100" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="hDiscount">Discount (₹)</label>
+                                <input type="number" id="hDiscount" class="form-input" placeholder="e.g., 100" value="0">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="hTaxPercent">Tax (%)</label>
+                                <input type="number" id="hTaxPercent" class="form-input" placeholder="e.g., 12" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="hTaxAmount">Tax Amount (₹)</label>
+                                <input type="number" id="hTaxAmount" class="form-input" readonly placeholder="Auto-calculated">
+                            </div>
+                        </div>
+                        <div class="form-row" style="background: #fef3c7; padding: 12px; border-radius: 10px; margin-top: 8px;">
+                            <div class="form-group">
+                                <label for="hGrandTotal" style="font-size: 1.1rem; font-weight: 700;">Grand Total (₹)</label>
+                                <input type="number" id="hGrandTotal" class="form-input" readonly placeholder="Auto-calculated" style="font-size: 1.2rem; font-weight: bold; background: white;">
+                            </div>
+                            <div class="form-group">
+                                <label for="hPaymentMethod">Payment Method</label>
+                                <select id="hPaymentMethod" class="form-input">
+                                    <option value="Cash">Cash</option>
+                                    <option value="Card">Card</option>
+                                    <option value="UPI">UPI</option>
+                                    <option value="Bank Transfer">Bank Transfer</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="hBillNumber">Bill Number *</label>
+                                <input type="text" id="hBillNumber" class="form-input" placeholder="Enter bill number" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="hIdProof">ID Proof Type</label>
+                                <select id="hIdProof" class="form-input">
+                                    <option value="Aadhar">Aadhar Card</option>
+                                    <option value="PAN">PAN Card</option>
+                                    <option value="Passport">Passport</option>
+                                    <option value="Driving License">Driving License</option>
+                                    <option value="Voter ID">Voter ID</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="hRemarks">Remarks / Special Notes</label>
+                                <textarea id="hRemarks" class="form-input" rows="2" placeholder="Any special requests or notes..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background: #fffbeb;">
+                    <button id="shareHotelBillBtn" class="btn btn-secondary" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white;">
+                        <span class="btn-icon">📤</span>
+                        <span class="btn-text">Share</span>
+                    </button>
+                    <button id="printHotelBillBtn" class="btn btn-primary" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                        <span class="btn-icon">🖨️</span>
+                        <span class="btn-text">Print</span>
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <div class="info-panel">
             <div class="info-header">

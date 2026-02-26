@@ -782,3 +782,268 @@ main {
     margin-top: 10px;
     font-weight: 600;
 }
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border-radius: 20px 20px 0 0;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.modal-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-footer {
+    padding: 16px 24px;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    border-radius: 0 0 20px 20px;
+}
+
+/* Bill Form Styles */
+.bill-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.form-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.form-group.full-width {
+    flex: 100%;
+    min-width: 100%;
+}
+
+.form-group.small {
+    flex: 0 0 calc(25% - 12px);
+    min-width: 80px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.9rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background: #f8fafc;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #10b981;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.form-input[type="file"] {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.form-input[type="color"] {
+    padding: 4px;
+    height: 40px;
+    cursor: pointer;
+}
+
+textarea.form-input {
+    resize: vertical;
+    min-height: 60px;
+}
+
+.position-row {
+    background: #f0fdf4;
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: -8px;
+}
+
+.position-row .form-group {
+    flex: 0 0 calc(25% - 12px);
+    min-width: 70px;
+}
+
+.position-row .form-input {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+}
+
+/* Responsive adjustments for modal */
+@media (max-width: 600px) {
+    .modal-content {
+        width: 95%;
+        max-height: 95vh;
+    }
+    
+    .form-group {
+        min-width: 100%;
+    }
+    
+    .form-group.small {
+        flex: 0 0 calc(50% - 8px);
+    }
+    
+    .position-row .form-group {
+        flex: 0 0 calc(50% - 8px);
+    }
+}
+
+/* Hotel Bill Modal Styles */
+.hotel-bill-modal {
+    max-width: 750px;
+}
+
+.hotel-bill-modal .modal-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hotel-bill-modal .form-input:focus {
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+.hotel-bill-modal .form-input[readonly] {
+    background: #f1f5f9;
+    cursor: not-allowed;
+}
+
+/* Room Entry Styles */
+.room-entry {
+    background: #fffbeb;
+    border: 1px solid #fcd34d;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.room-entry-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.room-entry-header span {
+    font-weight: 600;
+    color: #92400e;
+    font-size: 0.9rem;
+}
+
+.remove-room-btn {
+    background: #fca5a5;
+    border: none;
+    color: #991b1b;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background 0.3s ease;
+}
+
+.remove-room-btn:hover {
+    background: #f87171;
+}
+
+.room-entry .form-row {
+    margin-bottom: 8px;
+}
+
+.room-entry .form-group {
+    min-width: 100px;
+}
+
+.room-entry .form-input {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+}
+
+.room-entry label {
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+}
