@@ -585,9 +585,9 @@ class DocumentPrint {
             const rate = parseFloat(roomRate.value) || 0;
             const additional = parseFloat(additionalCharges.value) || 0;
             
-            if (checkIn && checkOut && checkOut > checkIn) {
+            if (checkIn && checkOut && checkOut >= checkIn) {
                 const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
-                const total = (nights * rate) + additional;
+                const total = ((nights || 1) * rate) + additional;
                 document.getElementById('totalAmount').value = total > 0 ? total : '';
             }
         };
