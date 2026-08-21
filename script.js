@@ -1101,8 +1101,8 @@ class DocumentPrint {
         const taxPercent = parseFloat(hTaxPercent.value) || 0;
         
         let nights = 0;
-        if (checkIn && checkOut && checkOut > checkIn) {
-            nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+        if (checkIn && checkOut && checkOut >= checkIn) {
+            nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)) || 1;
         }
         
         document.getElementById('hNights').value = nights > 0 ? nights : '';
