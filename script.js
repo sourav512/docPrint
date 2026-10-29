@@ -1212,6 +1212,9 @@ class DocumentPrint {
             const tomorrow = new Date(today);
             tomorrow.setDate(tomorrow.getDate() + 1);
             
+            // Bill date defaults to today (local date), but can be changed
+            const pad = (n) => String(n).padStart(2, '0');
+            document.getElementById('hBillDate').value = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
             document.getElementById('hCheckInDate').value = today.toISOString().split('T')[0];
             document.getElementById('hCheckOutDate').value = tomorrow.toISOString().split('T')[0];
             
@@ -1265,6 +1268,7 @@ class DocumentPrint {
             grandTotal: document.getElementById('hGrandTotal').value,
             paymentMethod: document.getElementById('hPaymentMethod').value,
             billNumber: document.getElementById('hBillNumber').value,
+            billDate: document.getElementById('hBillDate').value,
             idProof: document.getElementById('hIdProof').value,
             remarks: document.getElementById('hRemarks').value.trim()
         };
@@ -1273,6 +1277,10 @@ class DocumentPrint {
     validateHotelBillData(data) {
         if (!data.billNumber) {
             alert('Please enter the bill number.');
+            return false;
+        }
+        if (!data.billDate) {
+            alert('Please enter the bill date.');
             return false;
         }
         if (!data.guestName) {
@@ -1405,7 +1413,7 @@ class DocumentPrint {
         ctx.textAlign = 'left';
         ctx.fillText(`Bill No: ${data.billNumber}`, leftMargin, y);
         ctx.textAlign = 'right';
-        ctx.fillText(`Date: ${formatDate(new Date().toISOString().split('T')[0])}`, rightMargin, y);
+        ctx.fillText(`Date: ${formatDate(data.billDate)}`, rightMargin, y);
         
         y += 24 * scale;
         
@@ -1611,24 +1619,8 @@ class DocumentPrint {
         }
         
         // ===== FOOTER =====
-        y = canvas.height - 100 * scale;
-        
-        // Signature line
-        ctx.strokeStyle = '#333333';
-        ctx.lineWidth = 1 * scale;
-        ctx.setLineDash([]);
-        ctx.beginPath();
-        ctx.moveTo(rightMargin - 180 * scale, y);
-        ctx.lineTo(rightMargin, y);
-        ctx.stroke();
-        
-        ctx.font = `${14 * scale}px Arial, sans-serif`;
-        ctx.fillStyle = '#666666';
-        ctx.textAlign = 'center';
-        ctx.fillText('Authorized Signature', rightMargin - 90 * scale, y + 20 * scale);
-        
-        y += 36 * scale;
-        
+        y = canvas.height - 64 * scale;
+
         // Decorative bottom border
         const gradientBottom = ctx.createLinearGradient(leftMargin, y, rightMargin, y);
         gradientBottom.addColorStop(0, '#8B4513');
